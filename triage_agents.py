@@ -96,7 +96,7 @@ def ai_design_assist(**kwargs):
                                                         llm_accesspoint=llm_accesspoint
                                                         ).inference()  
             if issave:
-                utils.save_textfile(pydantic_data_schema_draft, filepath=cfg.result_dirpath / f"{data_schema_name}_pydantic_data_schema_draft__{llm_modelname_tag}.md")
+                utils.save_textfile(pydantic_data_schema_draft, filepath=cfg.result_dirpath / f"{data_schema_name}_schema_draft__{llm_modelname_tag}.md")
             else:
                 print(triage_llm_prompt_draft)
             # break
