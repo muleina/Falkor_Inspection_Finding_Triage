@@ -54,5 +54,5 @@ I have decided not to use knowledge context retrieval through semantic RAG and r
 
     4) Once gain, I wish I added ticket evaluator Agent using RAGAS. It would haven a great addition.
 
-    5) A docker container and test scripts (pytest) would have been a great addition in the repo. But, a simple requirements.txt along with installation and execution scripts have been provided.  
+    5) A docker container and test scripts (e.g., pytest) would have been a great addition in the repo. But, a simple requirements.txt along with installation and execution scripts have been provided. A python package checker has been addded to the github workflow.
 
