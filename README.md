@@ -9,18 +9,21 @@ Build the system that performs this triage. Input is a CSV of findings plus an e
 Output is a JSON file of tickets. A human still approves the result; the system produces the draft.
 
 ## Installation
+
     pip install -r requirement.txt
     bash setup_ollama_api_key.sh
+
 ## Inference
     bash agent_run.sh
 
 ## Resources
+
 - resources/data/inspection_findings.csv
 - resources/data/equipment_registry.csv
 - resources/reference/domain_knowledge.md
 - resources/reference/example_ticket.json
 
-## Designs - TODO
+## Designs
 
 The overall design would include prompt and data validation schema generation for the Triage Agent, Triage Agent Design, and Testing.
 
@@ -31,10 +34,9 @@ Draft will be validated and corrected before integrated into the agent engine.
 
 ### Triage Agent 
 - Simple Prompt-based Agent: With and without metadata filtering
-- RAG-based Agent: Keyword Search (keyword and semantic)
 
-### Testing
- - Schema Validation
- - RAGAS: faithfulness, response relevancy 
- - Edge case and output validation
+### Testing - TODO
+
+- Input/Output Schema Validation - Done
+- RAGAS: faithfulness, response relevancy - TODO
 
