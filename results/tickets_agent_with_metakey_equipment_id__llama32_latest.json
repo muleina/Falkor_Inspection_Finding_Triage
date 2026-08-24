@@ -1,0 +1,447 @@
+{
+    "generated_at": "2026-08-24T17:07:27.117575",
+    "tickets_generated": 21,
+    "tickets": [
+        {
+            "ticket_id": "TKT-1005",
+            "finding_id": "F-1001",
+            "equipment_id": "K-3401",
+            "summary": "Vibration trend on non-drive end bearing of main gas export compressor train is increasing, indicating potential failure",
+            "likelihood_of_failure": {
+                "score": 8,
+                "rationale": "Trend has not plateaued, growing 1x component with sidebands, and daily vibration analysis indicates unusual activity"
+            },
+            "impact_of_failure": {
+                "score": 10,
+                "rationale": "Single train, no spare, no workaround; failure would lead to platform shutdown and production cut within hour"
+            },
+            "urgency": {
+                "score": 9,
+                "rationale": "Derived from likelihood (8) and impact (10) using urgency function; no escalation override"
+            },
+            "recommended_action": "Rotate equipment specialist to investigate and perform vibration analysis daily",
+            "review_required": true,
+            "review_reason": "Safety Critical Element and potential for delayed consequences"
+        },
+        {
+            "ticket_id": "TKT-1002",
+            "finding_id": "F-1002",
+            "equipment_id": "PSV-1310",
+            "summary": "Faint hissing from PSV outlet tailpipe; light hydrocarbon smell nearby; set pressure well above current operating pressure",
+            "likelihood_of_failure": {
+                "score": 6,
+                "rationale": "Faint hissing detected; light hydrocarbon smell nearby; set pressure well above current operating pressure; evidence of passing or weeping treated as impairment of a protection layer"
+            },
+            "impact_of_failure": {
+                "score": 8,
+                "rationale": "Safety Critical Element; redundancy available; but potential for delayed or hidden consequences; light hydrocarbon smell nearby"
+            },
+            "urgency": {
+                "score": 7,
+                "rationale": "Derived from likelihood and impact; no escalation override"
+            },
+            "recommended_action": "Investigate further to determine cause of hissing and smell; inspect for signs of weeping or impairment of protection layer",
+            "review_required": true,
+            "review_reason": "Safety Critical Element; potential for delayed or hidden consequences"
+        },
+        {
+            "ticket_id": "TKT-1003",
+            "finding_id": "F-1003",
+            "equipment_id": "FW-8102",
+            "summary": "Firewater Pump failed to start on the first attempt during weekly test; starting batteries measured 22.8 V at rest, which is on the low side",
+            "likelihood_of_failure": {
+                "score": 8,
+                "rationale": "Pump failed to start on the first attempt, which indicates a trend that is still moving; starting batteries measured 22.8 V at rest, which is below the expected range"
+            },
+            "impact_of_failure": {
+                "score": 9,
+                "rationale": "The firewater pump is a Safety Critical Element, and its failure could lead to a major accident scenario; the low starting battery voltage indicates a potential degradation of the pump's performance"
+            },
+            "urgency": {
+                "score": 7,
+                "rationale": "The pump failed to start on the first attempt, which indicates a trend that is still moving; the low starting battery voltage indicates a potential degradation of the pump's performance, which requires immediate attention"
+            },
+            "recommended_action": "Conduct a thorough inspection of the firewater pump and its starting batteries to identify the cause of the failure and take corrective action",
+            "review_required": true,
+            "review_reason": "Safety Critical Element"
+        },
+        {
+            "ticket_id": "TKT-1005",
+            "finding_id": "F-1004",
+            "equipment_id": "PL-1002",
+            "summary": "Corrosion under insulation on 6 inch production flowline - heavy scaling detected, UT readings indicate 6.2 mm against 11.1 mm minimum allowable",
+            "likelihood_of_failure": {
+                "score": 9,
+                "rationale": "Heavy scaling detected with UT readings indicating a 6.2 mm crack against a minimum allowable of 7.4 mm, and corrosion under insulation is the known threat"
+            },
+            "impact_of_failure": {
+                "score": 8,
+                "rationale": "Corrosion under insulation is a safety critical element, and failure could lead to a major accident scenario"
+            },
+            "urgency": {
+                "score": 7,
+                "rationale": "Urgency score derived from likelihood and impact, with no escalation override justified"
+            },
+            "recommended_action": "Inspect and repair or replace insulation cladding on 6 inch production flowline",
+            "review_required": false,
+            "review_reason": null
+        },
+        {
+            "ticket_id": "TKT-1005",
+            "finding_id": "F-1005",
+            "equipment_id": "FG-0455",
+            "summary": "Detector head did not respond to 50% LEL test gas; appears clean, no obvious damage to the optics.",
+            "likelihood_of_failure": {
+                "score": 8,
+                "rationale": "Detector head did not respond to 50% LEL test gas; repeated with a second cylinder, still no response. The other two heads in the same voted group responded correctly. Drift with salt and humidity is a known issue with this detector type."
+            },
+            "impact_of_failure": {
+                "score": 9,
+                "rationale": "Safety Critical Element; the detector is part of a voted group, and failure could lead to undetected hydrocarbon gas presence."
+            },
+            "urgency": {
+                "score": 7,
+                "rationale": "Derived from likelihood and impact; the detector's failure could lead to safety risks, but the likelihood of immediate failure is moderate."
+            },
+            "recommended_action": "Calibrate detector head and inspect for signs of drift or damage.",
+            "review_required": true,
+            "review_reason": "Safety Critical Element"
+        },
+        {
+            "ticket_id": "TKT-1005",
+            "finding_id": "F-1006",
+            "equipment_id": "CR-5001",
+            "summary": "Main hoist wire rope shows 6 broken wires within one lay length in the section that spools onto the drum at maximum boom radius; poor rope lubrication along the same section",
+            "likelihood_of_failure": {
+                "score": 9,
+                "rationale": "Up: trend that is still moving; rope lubrication is poor along the same section; detection by a method that only catches late-stage damage"
+            },
+            "impact_of_failure": {
+                "score": 8,
+                "rationale": "Up: absence of redundancy; Safety Critical Element; failures that degrade a protection layer rather than causing direct loss"
+            },
+            "urgency": {
+                "score": 7,
+                "rationale": "Derived from likelihood and impact using the function described in <KNOWLEDGE_BASE>"
+            },
+            "recommended_action": "Inspect and replace the main hoist wire rope immediately",
+            "review_required": true,
+            "review_reason": "Safety Critical Element"
+        },
+        {
+            "ticket_id": "TKT-1007",
+            "finding_id": "F-1007",
+            "equipment_id": "P-3305",
+            "summary": "Corrosion inhibitor pump has tripped again on low discharge pressure; suspect diaphragm; intermittent injection to wellhead manifold",
+            "likelihood_of_failure": {
+                "score": 8,
+                "rationale": "Three tripping events this month; intermittent injection log; diaphragm suspect"
+            },
+            "impact_of_failure": {
+                "score": 6,
+                "rationale": "Downstream carbon steel corrosion within weeks; consequence lands six months later"
+            },
+            "urgency": {
+                "score": 7,
+                "rationale": "Low likelihood, high impact; SCE; calculated urgency"
+            },
+            "recommended_action": "Inspect diaphragm; replace if faulty; perform maintenance during next scheduled shutdown",
+            "review_required": true,
+            "review_reason": "Safety Critical Element; potential for delayed consequences"
+        },
+        {
+            "ticket_id": "TKT-1008",
+            "finding_id": "F-1008",
+            "equipment_id": "SC-1001",
+            "summary": "Crack indication found at the toe of the weld connecting a primary brace to the cellar deck node at grid B4; primary structural connection; surrounding coating is intact",
+            "likelihood_of_failure": {
+                "score": 8,
+                "rationale": "Confirmed by MPI, length approximately 45 mm; this is a primary structural connection; surrounding coating is intact so this is not a general fabric issue"
+            },
+            "impact_of_failure": {
+                "score": 9,
+                "rationale": "This is a primary structural connection; Surrounding coating is intact so this is not a general fabric issue; confirmed by MPI"
+            },
+            "urgency": {
+                "score": 7,
+                "rationale": "Derived from likelihood and impact; no escalation override"
+            },
+            "recommended_action": "Inspect primary brace welds at grid B4; perform MPI re-inspection",
+            "review_required": true,
+            "review_reason": "Safety Critical Element"
+        },
+        {
+            "ticket_id": "TKT-1009",
+            "finding_id": "F-1009",
+            "equipment_id": "SC-1001",
+            "summary": "General coating breakdown across the underside of the cellar deck plating between grids C2 and C5; fabric maintenance backlog",
+            "likelihood_of_failure": {
+                "score": 2,
+                "rationale": "Repeat occurrence, active mechanism (corrosion under wet insulation is progressing now), detection by a method that only catches late-stage damage"
+            },
+            "impact_of_failure": {
+                "score": 5,
+                "rationale": "Safety Critical Element, absence of redundancy, delayed or hidden consequences (loss of corrosion inhibitor has no effect today and a substantial effect in eighteen months)"
+            },
+            "urgency": {
+                "score": 7,
+                "rationale": "Derived from likelihood and impact using the function described in <KNOWLEDGE_BASE>, with no escalation override justification"
+            },
+            "recommended_action": "Schedule a maintenance window to inspect and address the coating breakdown, and ensure fabric maintenance is brought up to date",
+            "review_required": true,
+            "review_reason": "Review required due to Safety Critical Element and potential for delayed or hidden consequences"
+        },
+        {
+            "ticket_id": "TKT-1010",
+            "finding_id": "F-1010",
+            "equipment_id": "HVAC-7201",
+            "summary": "Temporary refuge pressurisation unit failing to maintain positive pressure; may compromise muster station safety",
+            "likelihood_of_failure": {
+                "score": 8,
+                "rationale": "Low likelihood due to fan running at rated speed, but suspect either a damper not fully closing or degraded door seals somewhere in the envelope"
+            },
+            "impact_of_failure": {
+                "score": 9,
+                "rationale": "Safety Critical Element; absence of redundancy; potential for delayed or hidden consequences; loss of evacuation capacity"
+            },
+            "urgency": {
+                "score": 9,
+                "rationale": "Immediate due to Safety Critical Element; potential for delayed or hidden consequences"
+            },
+            "recommended_action": "Inspect and repair or replace damper and door seals; ensure proper installation and operation of pressurisation unit",
+            "review_required": true,
+            "review_reason": "Safety Critical Element; potential for delayed or hidden consequences"
+        },
+        {
+            "ticket_id": "TKT-1011",
+            "finding_id": "F-1011",
+            "equipment_id": "DEL-8300",
+            "summary": "Partial deluge system blockage in north quadrant affecting two producing wellheads; reduced coverage and potential for increased risk",
+            "likelihood_of_failure": {
+                "score": 8,
+                "rationale": "Repeat occurrence of nozzle blockage from marine growth and scale; partial blockage reduces coverage over a specific area; system looks healthy from the skid but is not delivering where it matters; evidence from equipment registry"
+            },
+            "impact_of_failure": {
+                "score": 9,
+                "rationale": "Safety Critical Element; absence of redundancy; delayed or hidden consequences; potential for increased risk to production and safety"
+            },
+            "urgency": {
+                "score": 7,
+                "rationale": "Derived from likelihood and impact; no escalation override justified"
+            },
+            "recommended_action": "Inspect and clean the deluge system nozzles in the north quadrant; perform a full flow test to verify coverage",
+            "review_required": true,
+            "review_reason": "Safety Critical Element; potential for increased risk to production and safety"
+        },
+        {
+            "ticket_id": "TKT-1012",
+            "finding_id": "F-1012",
+            "equipment_id": "LB-4102",
+            "summary": "Hydraulic release mechanism on freefall lifeboat did not operate cleanly during annual survey, affecting launch capability.",
+            "likelihood_of_failure": {
+                "score": 6,
+                "rationale": "Notchiness and required significantly more force than specification indicate potential degradation, but the mechanism still functions. (Class Survey finding)"
+            },
+            "impact_of_failure": {
+                "score": 8,
+                "rationale": "Lifeboat is declared unavailable due to the issue, reducing evacuation capacity. (Engineer Comment: Certified survival craft under class survey. Any defect that could prevent launch reduces the total evacuation capacity of the installation.)"
+            },
+            "urgency": {
+                "score": 7,
+                "rationale": "Low-likelihood but high-impact finding on a Safety Critical Element. Urgency overrides normal calculation due to immediate impact on installation safety."
+            },
+            "recommended_action": "Overhaul of the release gear to ensure clean operation and prevent future failures.",
+            "review_required": true,
+            "review_reason": "Safety Critical Element and potential impact on evacuation capacity"
+        },
+        {
+            "ticket_id": "TKT-1013",
+            "finding_id": "F-1013",
+            "equipment_id": "INST-2150",
+            "summary": "Interface level transmitter on V-1201 is reading approximately 12% higher than the backup transmitter and around 15% higher than the sight glass, diverging steadily over three weeks.",
+            "likelihood_of_failure": {
+                "score": 8,
+                "rationale": "Divergence has been growing steadily over about three weeks, indicating a trend that is still moving. This, combined with the fact that control is currently on this transmitter, suggests a high likelihood of failure."
+            },
+            "impact_of_failure": {
+                "score": 6,
+                "rationale": "The interface level transmitter feeds both control and the high level alarm, and operators generally know when it is lying to them. However, relying on operator intuition is not a control measure we are allowed to write down. The impact is moderate rather than extreme, but still significant."
+            },
+            "urgency": {
+                "score": 7,
+                "rationale": "The likelihood of failure is high, and the impact is moderate. This finding requires attention this week, as it is a trend that is still moving and could lead to a failure if not addressed."
+            },
+            "recommended_action": "Inspect the interface level transmitter and its connections, and consider replacing it if necessary.",
+            "review_required": true,
+            "review_reason": "Safety Critical Element"
+        },
+        {
+            "ticket_id": "TKT-1014",
+            "finding_id": "F-1014",
+            "equipment_id": "V-1305",
+            "summary": "Test separator internals inspected. Inlet deflector plate is partly detached, one of the four support brackets has corroded through. Vessel shell and heads in good condition. Test separator is not currently in service.",
+            "likelihood_of_failure": {
+                "score": 6,
+                "rationale": "Repeat occurrence of a failure that has already occurred this period; active, unmitigated mechanism (corrosion under wet insulation is progressing now)"
+            },
+            "impact_of_failure": {
+                "score": 8,
+                "rationale": "Safety Critical Element, failures that degrade a protection layer rather than causing direct loss; delayed or hidden consequences \u2014 loss of corrosion inhibitor has no effect today and a substantial effect in eighteen months"
+            },
+            "urgency": {
+                "score": 7,
+                "rationale": "Escalation potential; absence of redundancy; Safety Critical Element"
+            },
+            "recommended_action": "Schedule maintenance to inspect and repair the corroded support bracket and inlet deflector plate; ensure test separator is properly isolated and bypassed during well testing",
+            "review_required": true,
+            "review_reason": "Safety Critical Element"
+        },
+        {
+            "ticket_id": "TKT-1015",
+            "finding_id": "F-1015",
+            "equipment_id": "V-2450",
+            "summary": "Dirty level gauge glass on fuel gas scrubber; level control appears to be working normally on the transmitter.",
+            "likelihood_of_failure": {
+                "score": 4,
+                "rationale": "Visual inspection; level control appears to be working normally on the transmitter; no liquid carryover indications downstream."
+            },
+            "impact_of_failure": {
+                "score": 3,
+                "rationale": "Fuel gas scrubber protects turbines from liquid carryover; dirty level gauge glass may indicate potential issue, but level control appears to be working normally."
+            },
+            "urgency": {
+                "score": 7,
+                "rationale": "Likelihood of 4; impact of 3; no urgency override"
+            },
+            "recommended_action": "Clean the level gauge glass and inspect the level control system.",
+            "review_required": false,
+            "review_reason": null
+        },
+        {
+            "ticket_id": "TKT-1016",
+            "finding_id": "F-1016",
+            "equipment_id": "PSV-3420",
+            "summary": "Certification tag on the compressor discharge PSV is illegible, the label has corroded; on PSV-3420; impact on safe operation",
+            "likelihood_of_failure": {
+                "score": 4,
+                "rationale": "Physical condition of the valve looks fine; certification tag is illegible but the valve is in date; recent recertification in March 2025"
+            },
+            "impact_of_failure": {
+                "score": 8,
+                "rationale": "Safety Critical Element; impact on safe operation; potential for delayed or hidden consequences"
+            },
+            "urgency": {
+                "score": 7,
+                "rationale": "Likelihood of 4; impact of 8; recent recertification; potential for delayed or hidden consequences"
+            },
+            "recommended_action": "Inspect and clean the certification tag; verify the valve's physical condition",
+            "review_required": false,
+            "review_reason": null
+        },
+        {
+            "ticket_id": "TKT-1017",
+            "finding_id": "F-1017",
+            "equipment_id": "FW-8101",
+            "summary": "Firewater pump A started first time and ran up correctly but discharge pressure stabilised at 9.2 barg against a design of 11 barg. Flow was not measured. Suspect either pump internal wear or a partly closed valve somewhere in the test line.",
+            "likelihood_of_failure": {
+                "score": 6,
+                "rationale": "Engine parameters all normal, but discharge pressure is 0.8 barg below design. Suspect either pump internal wear or a partly closed valve."
+            },
+            "impact_of_failure": {
+                "score": 10,
+                "rationale": "Failure of a firewater pump would leave the installation out of compliance from the point the impairment is known, and would impact safety."
+            },
+            "urgency": {
+                "score": 9,
+                "rationale": "Urgency score of 9 due to high impact of failure and lack of redundancy. Overridden by finding leaving a protection layer impaired without a recorded deviation."
+            },
+            "recommended_action": "Inspect pump internal wear and check for any partly closed valves in the test line.",
+            "review_required": true,
+            "review_reason": "Review required due to high impact of failure and lack of redundancy."
+        },
+        {
+            "ticket_id": "TKT-1018",
+            "finding_id": "F-1018",
+            "equipment_id": "INST-2151",
+            "summary": "Backup interface level transmitter has been reading a flat line for approximately 36 hours. Suspect a blocked impulse line or a failed sensor. On V-1201, impact if fails.",
+            "likelihood_of_failure": {
+                "score": 9,
+                "rationale": "High likelihood due to lack of movement in 36 hours, suspect blocked impulse line or failed sensor. Reliability_score is 7, but given the critical nature of the service, likelihood is high."
+            },
+            "impact_of_failure": {
+                "score": 8,
+                "rationale": "Impact is moderate due to redundancy, but failure could still cause issues. Criticality_score is 6, but impact is higher due to safety critical nature of the service."
+            },
+            "urgency": {
+                "score": 7,
+                "rationale": "Derived from likelihood and impact, urgency is moderate. No escalation override justified."
+            },
+            "recommended_action": "Investigate and clean impulse lines and sensors, and replace if necessary",
+            "review_required": true,
+            "review_reason": "Safety Critical Element and potential for delayed consequences"
+        },
+        {
+            "ticket_id": "TKT-1019",
+            "finding_id": "F-1019",
+            "equipment_id": "K-3401",
+            "summary": "Lagging on the second stage discharge line has come loose and a section of cladding is flapping in the wind; on Main gas export compressor train; impact on production and safety",
+            "likelihood_of_failure": {
+                "score": 4,
+                "rationale": "Lagging on the second stage discharge line is a trend that is still moving; a repeat of a failure that has already occurred this period; active, unmitigated mechanism"
+            },
+            "impact_of_failure": {
+                "score": 8,
+                "rationale": "Main gas export compressor train has no redundancy; Safety Critical Element; failures that degrade a protection layer rather than causing direct loss"
+            },
+            "urgency": {
+                "score": 9,
+                "rationale": "Immediate; lagging on the second stage discharge line will end up as a dropped object if left; Safety Critical Element"
+            },
+            "recommended_action": "Secure the lagging on the second stage discharge line to prevent dropped objects and ensure safe operation",
+            "review_required": true,
+            "review_reason": "Safety Critical Element"
+        },
+        {
+            "ticket_id": "TKT-1020",
+            "finding_id": "F-1020",
+            "equipment_id": "DEL-8300",
+            "summary": "Isolation valve on the deluge branch line to the north quadrant was found chained in the closed position with no valve status tag and no entry in the impairment register. Valve was reopened immediately and the control room informed. Unknown how long it had been shut.",
+            "likelihood_of_failure": {
+                "score": 5,
+                "rationale": "No valve status tag and no entry in the impairment register indicate a lack of maintenance. The valve was reopened immediately, suggesting it was not critical to the system's operation. However, the lack of a status tag and the unknown duration of the shutdown suggest a potential for future issues."
+            },
+            "impact_of_failure": {
+                "score": 3,
+                "rationale": "The isolation valve is critical to the deluge system's operation. A failure could result in a loss of deluge coverage, potentially affecting safety. However, the impact is moderate due to the valve's redundancy and the system's ability to bypass it."
+            },
+            "urgency": {
+                "score": 7,
+                "rationale": "The finding indicates a potential for future issues, and the lack of maintenance and unknown duration of the shutdown suggest a need for prompt attention. However, the impact is moderate, and the system's redundancy reduces the urgency."
+            },
+            "recommended_action": "Inspect and maintain the isolation valve, including checking the valve status tag and updating the impairment register.",
+            "review_required": true,
+            "review_reason": "Unknown duration of the shutdown and lack of maintenance"
+        },
+        {
+            "ticket_id": "TKT-1021",
+            "finding_id": "F-1021",
+            "equipment_id": "V-1201",
+            "summary": "Insulation on the separator shell is damp and stained around the manway area; rust staining running down from under the cladding. Potential for wall loss or cracking.",
+            "likelihood_of_failure": {
+                "score": 6,
+                "rationale": "Visual inspection of damp and stained insulation; rust staining under cladding; no indication of pipework underneath. Historically trouble-free vessel, but pressure boundary. Likelihood of failure moderate due to potential for wall loss or cracking."
+            },
+            "impact_of_failure": {
+                "score": 8,
+                "rationale": "Safety Critical Element; potential for wall loss or cracking; impact on first stage production. Redundancy available, but not currently operational. Delayed consequences possible."
+            },
+            "urgency": {
+                "score": 7,
+                "rationale": "Moderate likelihood and high impact; potential for wall loss or cracking. Urgency this week due to potential safety risks."
+            },
+            "recommended_action": "Inspect and clean separator shell insulation; investigate rust staining; consider pressure vessel inspection",
+            "review_required": true,
+            "review_reason": "Safety Critical Element; potential for wall loss or cracking"
+        }
+    ]
+}
