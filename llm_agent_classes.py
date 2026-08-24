@@ -192,7 +192,7 @@ class AIDesignAssistant():
                                     - Identify conflicts or ambiguities.
                                     - Keep the prompt concise and robust.
                                 
-                                RETURN:
+                                ### RETURN:
                                     - Prompt template.
                                 
                                 """.format(QUERY=query, KNOWLEDGE_BASE='\n\n'.join([f'{f}:{utils.load_textfile(cfg.resource_dirpath / f)}' for f in knowledge_filepath_list]) if len(knowledge_filepath_list) else '')
@@ -373,7 +373,7 @@ class TicketTriagAgent():
             # print(TICKET_SCHEMA)
             prompt_user = {"role": "user",
                                 "content": """Generate ticket json for the supplied inspection findings.
-                                    Use the following the finding FINDING_INSPECTION as an input.
+                                    Use the following the finding as an input.
                                     Generate exactly one ticket for every finding.
                                     Use the matching equipment_id from the registry. Base decisions on the finding, registry information, engineer comments, and domain knowledge.
                                     Follow all scoring, urgency derivation, override, review, and output rules from the system prompt.
@@ -382,7 +382,7 @@ class TicketTriagAgent():
                             
             prompt_system = {"role": "system",
                                 "content": f"""You are inspection inspection-finding triage assistant that generate tickets for the triage system for an offshore production platform.
-                                        ## RESOURCE VARIABLES
+                                        ### RESOURCE VARIABLES
                                             <KNOWLEDGE_BASE>
                                                 {self.domain_knowledge_data}
                                             </KNOWLEDGE_BASE>
@@ -402,8 +402,8 @@ class TicketTriagAgent():
                                             - Do not use markdown headers or titles.
                                         </formatting_rules>
 
-                                        ## INSTRUCTIONS 
-                                        Your task is to generate one maintenance ticket for each inspection finding using RULES provided below:
+                                        ### INSTRUCTIONS 
+                                            Your task is to generate one maintenance ticket for each inspection finding using RULES provided below:
                                             - The finding data from <FINDING_INSPECTION>, the equipment registry from <EQUIPMENT_REGISTRY>, and expert knowledge from <KNOWLEDGE_BASE>.  
                                             - Treat <FINDING_INSPECTION> as the primary evidence.
                                             - Retrieve equipment information from <EQUIPMENT_REGISTRY> using equipment_id, matching the <FINDING_INSPECTION> using equipment_id.
@@ -424,9 +424,10 @@ class TicketTriagAgent():
                                             
                                         ### OUTPUT CONSTRAINTS (STRICT)
                                             - Output only valid JSON matching the exact structure in <TICKET_SCHEMA>. Do not include markdown or explanatory text.
-                                            - Use the numeric part of the 'finding_id' to create a unique ticket ID: 'TKT-<numeric part>'.  For example, 'F-1005' → 'TKT-1005'.
-                                            - Ensure the output begins with '{' and ends with '}'.
-                                            
+                                            - Use the numeric part of the 'finding_id' to create a unique ticket ID: 'TKT-<numeric part>'.  For example, 'F-1005' → 'TKT-1005'.   
+                                        
+                                        ### RETURN 
+                                            - Valid JSON object following <TICKET_SCHEMA>.
                                         """
                             }
             
@@ -437,11 +438,10 @@ class TicketTriagAgent():
                                     ],
                         "options": self.options,
                         "stream": False,
-                        "format": Ticket.model_json_schema() # Force JSON structure       
+                        # "format": Ticket.model_json_schema() # Force JSON structure       
                     }
             
-            print(f"system prompt length: {len(prompt_system['content'])}")
-            print(f"user prompt length: {len(prompt_user)}")
+            print(f"system prompt length: {len(prompt_system['content'])}, user prompt length: {len(prompt_user['content'])}.")
             
         except Exception as ex:
             print(f"ERROR: Prompt preparation failed: {ex}.")
