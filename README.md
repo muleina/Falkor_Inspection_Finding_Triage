@@ -15,10 +15,10 @@ Output is a JSON file of tickets. A human still approves the result; the system 
     bash agent_run.sh
 
 ## Resources
-- data/inspection_findings.csv
-- data/equipment_registry.csv
-- reference/domain_knowledge.md
-- reference/example_ticket.json
+- resources/data/inspection_findings.csv
+- resources/data/equipment_registry.csv
+- resources/reference/domain_knowledge.md
+- resources/reference/example_ticket.json
 
 ## Designs - TODO
 
