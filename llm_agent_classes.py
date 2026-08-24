@@ -419,7 +419,7 @@ class TicketTriagAgent():
                                             - Apply documented urgency overrides and explain any override in the rationale.
                                             - summary must state what is wrong, where, and why it matters; do not simply copy the finding description.
                                             - recommended_action must specify a concrete activity. "Investigate further" alone is insufficient.
-                                            - Every rationale must cite the evidence supporting its score.
+                                            - Every rationale must cite the evidence supporting its score, and respect the length limit given in <TICKET_SCHEMA>.
                                             - Set review_required to true when required by the domain rules. Provide review_reason whenever it is true.
                                             
                                         ### OUTPUT CONSTRAINTS (STRICT)
@@ -438,7 +438,7 @@ class TicketTriagAgent():
                                     ],
                         "options": self.options,
                         "stream": False,
-                        # "format": Ticket.model_json_schema() # Force JSON structure       
+                        "format": Ticket.model_json_schema() # Force JSON structure       
                     }
             
             print(f"system prompt length: {len(prompt_system['content'])}, user prompt length: {len(prompt_user['content'])}.")
