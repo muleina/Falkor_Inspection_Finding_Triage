@@ -467,7 +467,7 @@ class TicketTriagAgent():
             payload = self.prepare_payload(inspection_finding_row)
             response = self.llm_inference(**payload)
             llm_response = response.message.content.strip()
-            print("LLM: ", llm_response)
+            # print("LLM: ", llm_response)
             llm_response =json.loads(llm_response)
         except ValidationError as ex:
             print(f"ERROR: Set response to None. {ex}")
@@ -503,14 +503,16 @@ class TicketTriagAgent():
                 tickets_list = []
                 for idx, row in tqdm(inspection_finding_csv_data_df.iterrows()):
                     InspectionFinding.model_validate(row.to_dict())  # enforce InspectionFinding validation
-                    ticket_dict = self.get_ticket_inference(row.to_dict())
-                    if ticket_dict:
-                        # print(ticket_dict)
-                        Ticket.model_validate(ticket_dict) # validate schema for a single ticket_dict
-                        tickets_list.append(ticket_dict)
-                        
-                        # break
-                        
+                    try:
+                        ticket_dict = self.get_ticket_inference(row.to_dict())
+                        if ticket_dict:
+                            # print(ticket_dict)
+                            Ticket.model_validate(ticket_dict) # validate schema for a single ticket_dict
+                            tickets_list.append(ticket_dict)
+                            # break
+                    except Exception as ex:
+                            print(f"ERROR: {ex}")
+                            
                 tickets_json = {"generated_at": datetime.now().isoformat(),
                                 "tickets_generated": len(tickets_list),
                                 "tickets":tickets_list
