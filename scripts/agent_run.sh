@@ -5,26 +5,27 @@
 echo "Running agent_run_script.sh"
 
 # #####################################################################################
-# # Ensure the Ollama CLI is installed
-# if !command -v ollama &> /dev/null; then
-#     echo "------------------------------------------------"
-#     echo "Error: Ollama CLI is not installed."
-#     echo "Please install it first: curl -fsSL https://ollama.com/install.sh | sh"
-#     echo "------------------------------------------------"
-#     return 2 2>/dev/null || exit 2
-# fi
+# Ensure the Ollama CLI is installed
+if !command -v ollama &> /dev/null; then
+    echo "------------------------------------------------"
+    echo "Error: Ollama CLI is not installed."
+    echo "Please install it first: curl -fsSL https://ollama.com/install.sh | sh"
+    echo "------------------------------------------------"
+    return 2 2>/dev/null || exit 2
+fi
 
 #####################################################################################
 # Specify the Ollama LLM model accesspoint to use: local or cloud
-LLM_ACCESSPOINT="local"
-# LLM_ACCESSPOINT="cloud"
+# LLM_ACCESSPOINT="local"
+LLM_ACCESSPOINT="cloud"
 
 # Specify the LLM model you want to use
-LLM_MODELNAME="llama3.2:latest"
+# LLM_MODELNAME="llama3.2:latest" # only local
 
-# LLM_MODELNAME="gpt-oss:20b"
-# LLM_MODELNAME="gpt-oss:120b"
-# LLM_MODELNAME="gemma4"
+# Cloud
+# LLM_MODELNAME="gpt-oss:20b" # Cloud
+# LLM_MODELNAME="gpt-oss:120b" # Cloud
+LLM_MODELNAME="gemma4" # Cloud
 
 echo $LLM_ACCESSPOINT
 echo $LLM_MODELNAME
@@ -57,10 +58,10 @@ else
 fi
 
 # PROMPT DESIGN FOR TIAGE AGENT USING AI DESGIN ASSISTANT
-# python triage_agents.py -md "design" -la "$LLM_ACCESSPOINT" -lm "$LLM_MODELNAME" -qt "prompt_design" -s
+python triage_agents.py -md "design" -la "$LLM_ACCESSPOINT" -lm "$LLM_MODELNAME" -qt "prompt_design" -s
 
 # VALIDATOR SCHEMA DESIGN FOR TIAGE AGENT USING AI DESGIN ASSISTANT
-# python triage_agents.py -md "design" -la "$LLM_ACCESSPOINT" -lm "$LLM_MODELNAME" -qt "schema_validator_design" -s 
+python triage_agents.py -md "design" -la "$LLM_ACCESSPOINT" -lm "$LLM_MODELNAME" -qt "schema_validator_design" -s 
 
 # # INSPECTION TRIAGE TOCKET GENERATION USING TICKEET TIAGE AGENT
 python triage_agents.py -md "triage" -la "$LLM_ACCESSPOINT" -lm "$LLM_MODELNAME" -mk "equipment_id" -s
