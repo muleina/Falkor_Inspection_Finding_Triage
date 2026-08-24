@@ -87,9 +87,7 @@ class ScoreRationale(BaseModel):
 
 class Ticket(BaseModel):
     """Individual maintenance ticket generated from an inspection finding."""
-    ticket_id: str = Field(..., 
-                        #    pattern=r"^TKT-\d{4}$", 
-                           description="Unique ticket ID in format TKT-####") # ticket number should be assigned sequentially and manual after LLM inference
+    ticket_id: str = Field(..., pattern=r"^TKT-\d{4}$", description="Unique ticket ID in format TKT-####")
     finding_id: str = Field(..., description="Must match a finding_id from the input CSV")
     equipment_id: str = Field(..., description="Must match an equipment_id from the registry")
     summary: str = Field(..., max_length=300, description="Concise summary of what is wrong, on what, and why it matters")
@@ -340,77 +338,115 @@ class TicketTriagAgent():
         Raises:
             ValueError: If no matching equipment-registry record is found.
         """
+        
+        payload = ""
+        
         if not len(inspection_finding_row):
             print("No inspection finding data.")
             return None
         
-        prompt_user = {"role": "user",
-                            "content": """Generate ticket json for the supplied inspection findings.
-                                Use the following the finding FINDING_INSPECTION as an input.
-                                Generate exactly one ticket for every finding.
-                                Use the matching equipment_id from the registry. Base decisions on the finding, registry information, engineer comments, and domain knowledge.
-                                Follow all scoring, urgency derivation, override, review, and output rules from the system prompt.
-                                Return only the JSON object. Do not include markdown or additional text."""
-                                }
-                        
-        prompt_system = {"role": "system",
-                            "content": """You are inspection inspection-finding triage assistant that generate tickets for the triage system for an offshore production platform.
-                            ### RESOURCE VARIABLES
-                                <KNOWLEDGE_BASE>
-                                    {KNOWLEDGE_BASE}
-                                </KNOWLEDGE_BASE>
-                                <EQUIPMENT_REGISTRY>
-                                    {EQUIPMENT_REGISTRY}
-                                </EQUIPMENT_REGISTRY>
-                                <FINDING_INSPECTION>
-                                    {FINDING_INSPECTION}
-                                </FINDING_INSPECTION>
-                                
-                            <formatting_rules>
-                            - Use a professional tone.
-                            - Format as standard Markdown paragraphs.
-                            - Do not use markdown headers or titles.
-                            </formatting_rules>
+        try:
+            TICKET_SCHEMA = """ 
+                                {
+                                    'ticket_id': 'TKT-####',
+                                    'finding_id': '<matching finding_id>',
+                                    'equipment_id': '<matching equipment_id>',
+                                    'summary': '<≤ 300 characters, stating what is wrong, on what, and why it matters; not a restatement of the original description>',
+                                    'likelihood_of_failure': {
+                                        'score': <int 1‑10>,
+                                        'rationale': '<evidence from the finding, equipment registry, and domain knowledge>'
+                                    },
+                                    'impact_of_failure': {
+                                        'score': <int 1‑10>,
+                                        'rationale': '<evidence from equipment criticality, safety‑critical status, redundancy, and domain knowledge>'
+                                    },
+                                    'urgency': {
+                                        'score': <int 1‑10>,
+                                        'rationale': '<derived from likelihood and impact using the function described below; include any escalation override justification>'
+                                    },
+                                    'recommended_action': '<≤ 300 characters, a concrete maintenance or mitigation activity; 'not investigate further'>',
+                                    'review_required': <true | false>,
+                                    'review_reason': '<string when review_required is true, otherwise null>'
+                                } 
+                            """
+            
+            # print(TICKET_SCHEMA)
+            prompt_user = {"role": "user",
+                                "content": """Generate ticket json for the supplied inspection findings.
+                                    Use the following the finding FINDING_INSPECTION as an input.
+                                    Generate exactly one ticket for every finding.
+                                    Use the matching equipment_id from the registry. Base decisions on the finding, registry information, engineer comments, and domain knowledge.
+                                    Follow all scoring, urgency derivation, override, review, and output rules from the system prompt.
+                                    Return only the JSON object. Do not include markdown or additional text."""
+                                    }
+                            
+            prompt_system = {"role": "system",
+                                "content": f"""You are inspection inspection-finding triage assistant that generate tickets for the triage system for an offshore production platform.
+                                        ## RESOURCE VARIABLES
+                                            <KNOWLEDGE_BASE>
+                                                {self.domain_knowledge_data}
+                                            </KNOWLEDGE_BASE>
+                                            <EQUIPMENT_REGISTRY>
+                                                {self.metadata_filtering(inspection_finding_row)}
+                                            </EQUIPMENT_REGISTRY>
+                                            <FINDING_INSPECTION>
+                                                {utils.dict2str_serialize(inspection_finding_row)}
+                                            </FINDING_INSPECTION>
+                                            <TICKET_SCHEMA>
+                                                {TICKET_SCHEMA}
+                                            </TICKET_SCHEMA>
+                                            
+                                        <formatting_rules>
+                                            - Use a professional tone.
+                                            - Format as standard Markdown paragraphs.
+                                            - Do not use markdown headers or titles.
+                                        </formatting_rules>
 
-                            ### INSTRUCTIONS 
-                            your task is to generate one maintenance ticket for each inspection finding using RULES provided below:
-                            - The finding data from <FINDING_INSPECTION>, the equipment registry from <EQUIPMENT_REGISTRY>, and expert knowledge from <KNOWLEDGE_BASE>.
-                            
-                            ### RULES:
-                                - Treat <FINDING_INSPECTION> as the primary evidence.
-                                - Retrieve equipment information from <EQUIPMENT_REGISTRY> using equipment_id, matching the <FINDING_INSPECTION> using equipment_id.
-                                - Use engineer_comment and <KNOWLEDGE_BASE> to inform scoring and decisions.
-                                - Do not invent requirements, facts or evidence.
-                                - Do not speculate and do not use external knowledge other than provided in <KNOWLEDGE_BASE>.
-                                - Generate exactly one ticket per finding.
-                                - likelihood_of_failure and impact_of_failure must each be scored 1–10 with evidence-based rationales.
-                                - Remember that reliability_score is a prior and runs in the opposite direction.
-                                - criticality_score is a prior, not the final impact score.
-                                - Account for real redundancy, hidden/delayed consequences, and Safety Critical Element implications.
-                                - Calculate urgency from likelihood and impact using the urgency function defined in <KNOWLEDGE_BASE>. Do not independently guess urgency.
-                                - Apply documented urgency overrides and explain any override in the rationale.
-                                - summary must state what is wrong, where, and why it matters; do not simply copy the finding description.
-                                - recommended_action must specify a concrete activity. "Investigate further" alone is insufficient.
-                                - Every rationale must cite the evidence supporting its score.
-                                - Set review_required to true when required by the domain rules. Provide review_reason whenever it is true.
-                                - Output only valid JSON matching the required structure. Do not include markdown or explanatory text.
-                            
-                            """.format(KNOWLEDGE_BASE=self.domain_knowledge_data, EQUIPMENT_REGISTRY=self.metadata_filtering(inspection_finding_row), FINDING_INSPECTION=utils.dict2str_serialize(inspection_finding_row))
-                        }
-        
-        payload = {"model": self.llm_model,
-                    "messages": [
-                                    prompt_system,
-                                    prompt_user
-                                ],
-                    "options": self.options,
-                    "stream": False,
-                    "format": Ticket.model_json_schema() # Force JSON structure       
-                }
-        
-        # print(f"system prompt length: {len(prompt_system['content'])}")
-        # print(f"user prompt length: {len(prompt_user)}")
-        
+                                        ## INSTRUCTIONS 
+                                        Your task is to generate one maintenance ticket for each inspection finding using RULES provided below:
+                                            - The finding data from <FINDING_INSPECTION>, the equipment registry from <EQUIPMENT_REGISTRY>, and expert knowledge from <KNOWLEDGE_BASE>.  
+                                            - Treat <FINDING_INSPECTION> as the primary evidence.
+                                            - Retrieve equipment information from <EQUIPMENT_REGISTRY> using equipment_id, matching the <FINDING_INSPECTION> using equipment_id.
+                                            - Use engineer_comment and <KNOWLEDGE_BASE> to inform scoring and decisions.
+                                            - Do not invent requirements, facts or evidence.
+                                            - Do not speculate and do not use external knowledge other than provided in <KNOWLEDGE_BASE>.
+                                            - Generate exactly one ticket per finding.
+                                            - likelihood_of_failure and impact_of_failure must each be scored 1–10 with evidence-based rationales.
+                                            - Remember that reliability_score is a prior and runs in the opposite direction.
+                                            - criticality_score is a prior, not the final impact score.
+                                            - Account for real redundancy, hidden/delayed consequences, and Safety Critical Element implications.
+                                            - Calculate urgency from likelihood and impact using the urgency function defined in <KNOWLEDGE_BASE>. Do not independently guess urgency.
+                                            - Apply documented urgency overrides and explain any override in the rationale.
+                                            - summary must state what is wrong, where, and why it matters; do not simply copy the finding description.
+                                            - recommended_action must specify a concrete activity. "Investigate further" alone is insufficient.
+                                            - Every rationale must cite the evidence supporting its score.
+                                            - Set review_required to true when required by the domain rules. Provide review_reason whenever it is true.
+                                            
+                                        ### OUTPUT CONSTRAINTS (STRICT)
+                                            - Output only valid JSON matching the exact structure in <TICKET_SCHEMA>. Do not include markdown or explanatory text.
+                                            - Use the numeric part of the 'finding_id' to create a unique ticket ID: 'TKT-<numeric part>'.  For example, 'F-1005' → 'TKT-1005'.
+                                            - Ensure the output begins with '{' and ends with '}'.
+                                            
+                                        """
+                            }
+            
+            payload = {"model": self.llm_model,
+                        "messages": [
+                                        prompt_system,
+                                        prompt_user
+                                    ],
+                        "options": self.options,
+                        "stream": False,
+                        "format": Ticket.model_json_schema() # Force JSON structure       
+                    }
+            
+            print(f"system prompt length: {len(prompt_system['content'])}")
+            print(f"user prompt length: {len(prompt_user)}")
+            
+        except Exception as ex:
+            print(f"ERROR: Prompt preparation failed: {ex}.")
+            raise ValueError(f"{ex}")
+            
         return payload
            
     def get_ticket_inference(self, inspection_finding_row: dict):
@@ -437,7 +473,7 @@ class TicketTriagAgent():
             print(f"ERROR: Set response to None. {ex}")
             llm_response = None
         except Exception as ex:
-            print(f"Failed to parse LLM response as JSON. Set response to None: {ex}")
+            print(f"Failed to parse LLM response as JSON. Set response to None: {ex}.")
             llm_response = None
         return llm_response
     
@@ -469,8 +505,7 @@ class TicketTriagAgent():
                     InspectionFinding.model_validate(row.to_dict())  # enforce InspectionFinding validation
                     ticket_dict = self.get_ticket_inference(row.to_dict())
                     if ticket_dict:
-                        # print(ticket_dict))
-                        ticket_dict['ticket_id'] = f"TKT-{idx+1:04d}" # ticket id is assigned based on the raw index of inspection
+                        # print(ticket_dict)
                         Ticket.model_validate(ticket_dict) # validate schema for a single ticket_dict
                         tickets_list.append(ticket_dict)
                         
