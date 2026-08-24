@@ -1,3 +1,15 @@
+"""Utility helpers for loading and saving text, CSV, and JSON data.
+
+Summary:
+    This module provides convenience functions for reading plain text and CSV
+    files into strings, loading CSV data with pandas, and writing text or JSON
+    outputs to disk. It is designed for lightweight data ingestion and export
+    in inspection/finding triage workflows.
+
+Author: Mulugeta W.A.
+Date: 2026-08-24
+"""
+
 import os
 import json
 import csv
@@ -40,10 +52,10 @@ def save_textfile(data: str, filepath: str | Path):
     except Exception as ex:
         print(f"ERROR: save_textfile: {ex}")
 
-def load_csv(filepath: str | Path, index_col:int = 0):
+def load_csv(filepath: str | Path, index_col:int = None):
     print(f"loading {filepath}...")
     try:
-        return pd.read_csv(filepath, index_col=index_col)
+        return pd.read_csv(filepath, index_col=index_col).apply(lambda col: pd.to_datetime(col, errors="ignore") if col.dtypes == "object" else col)  # Automatically find and convert all date-like string columns
     except Exception as ex:
         print(f"ERROR: load_csv: {ex}")
         
