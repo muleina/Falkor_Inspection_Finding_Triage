@@ -17,15 +17,15 @@ fi
 #####################################################################################
 # Specify the Ollama LLM model accesspoint to use: local or cloud
 LLM_ACCESSPOINT="local"
-# LLM_ACCESSPOINT="cloud"
+LLM_ACCESSPOINT="cloud"
 
 # Choose Local LLM model you want to use
-LLM_MODELNAME="llama3.2:latest" # only local
+# LLM_MODELNAME="llama3.2:latest" # only local
 
 # Choose Cloud Model you want to use
 # LLM_MODELNAME="gpt-oss:20b" # Cloud
 # LLM_MODELNAME="gpt-oss:120b" # Cloud
-# LLM_MODELNAME="gemma4" # Cloud
+LLM_MODELNAME="gemma4" # Cloud
 
 echo $LLM_ACCESSPOINT
 echo $LLM_MODELNAME
@@ -58,10 +58,10 @@ else
 fi
 
 # # PROMPT DESIGN FOR TIAGE AGENT USING AI DESGIN ASSISTANT
-# python triage_agents.py -md "design" -la "$LLM_ACCESSPOINT" -lm "$LLM_MODELNAME" -qt "prompt_design" -s
+python triage_agents.py -md "design" -la "$LLM_ACCESSPOINT" -lm "$LLM_MODELNAME" -qt "prompt_design" -s
 
 # # VALIDATOR SCHEMA DESIGN FOR TIAGE AGENT USING AI DESGIN ASSISTANT
-# python triage_agents.py -md "design" -la "$LLM_ACCESSPOINT" -lm "$LLM_MODELNAME" -qt "schema_validator_design" -s 
+python triage_agents.py -md "design" -la "$LLM_ACCESSPOINT" -lm "$LLM_MODELNAME" -qt "schema_validator_design" -s 
 
 # # INSPECTION TRIAGE TOCKET GENERATION USING TICKEET TIAGE AGENT
 python triage_agents.py -md "triage" -la "$LLM_ACCESSPOINT" -lm "$LLM_MODELNAME" -mk "equipment_id" -s
