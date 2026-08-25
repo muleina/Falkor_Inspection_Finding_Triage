@@ -13,6 +13,7 @@
 - Owing to limited time, I have not explored the prompt in detail, but rather supplied together with the knowledge sources during ticketing inference to improve performance.
 
     python triage_agents.py -md "design" -la "$LLM_ACCESSPOINT" -lm "$LLM_MODELNAME" -qt "prompt_design" -s
+  
     python triage_agents.py -md "design" -la "$LLM_ACCESSPOINT" -lm "$LLM_MODELNAME" -qt "schema_validator_design" -s 
 
 # A. Structured output
