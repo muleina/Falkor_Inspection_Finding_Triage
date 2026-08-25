@@ -18,17 +18,7 @@ Author: Mulugeta WA
 Date: 2026-08-24
 """
 
-import os
-import json
-import csv
-from pathlib import Path
-import pandas as pd
-import numpy as np
-from tqdm import tqdm
-from datetime import datetime
-from typing import List, Optional
 import argparse
-
 import utils
 import config as cfg 
 from llm_agent_classes import AIDesignAssistant, TicketTriagAgent
@@ -49,7 +39,7 @@ class KnowledgeRepo:
     inspection_findings_csv = cfg.resource_dirpath / cfg.inspection_findings_csv 
     example_ticket_json = cfg.resource_dirpath / cfg.example_ticket_json 
     
-def ai_design_assist(**kwargs):
+def ai_design_assist(**kwargs) -> None:
     """Generate LLM design artifacts for inspection triage workflows.
 
     This helper creates either a triage prompt draft or a pydantic schema draft
@@ -99,12 +89,10 @@ def ai_design_assist(**kwargs):
                 utils.save_textfile(pydantic_data_schema_draft, filepath=cfg.result_dirpath / f"{data_schema_name}_schema_draft__{llm_modelname_tag}.md")
             else:
                 print(triage_llm_prompt_draft)
-            # break
-    
     else:
         print(f"Undefined query_type: {query_type}. Please choose from ['prompt_design', 'schema_validator_design'].")
 
-def inspection_ticket_triage(**kwargs):
+def inspection_ticket_triage(**kwargs)-> None:
     """Run the inspection-finding triage workflow and optionally save its tickets.
 
     The function creates a :class:`TicketTriagAgent` using the configured domain

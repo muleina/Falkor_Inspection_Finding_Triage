@@ -10,20 +10,15 @@ Author: Mulugeta W.A.
 Date: 2026-08-24
 """
 
-import os
 import json
 import csv
 from pathlib import Path
 import pandas as pd
-import numpy as np
-from tqdm import tqdm
-from datetime import datetime
-from typing import List, Optional
 
-def dict2str_serialize(row_data: dict):
+def dict2str_serialize(row_data: dict) -> str:
     return ' '.join(f"{k}: {v}" for k, v in row_data.items())
 
-def load_textfile(filepath: str | Path):
+def load_textfile(filepath: str | Path) -> str:
     """read the markdown and text file"""
     
     print(f"loading {filepath}...")
@@ -44,7 +39,7 @@ def load_textfile(filepath: str | Path):
         print(f"ERROR: load_textfile: {ex}")
     return ''
 
-def save_textfile(data: str, filepath: str | Path):
+def save_textfile(data: str, filepath: str | Path) -> None:
     print(f"saving {filepath}...")
     try:
         with open(filepath, "w", encoding="utf-8") as file:
@@ -52,14 +47,15 @@ def save_textfile(data: str, filepath: str | Path):
     except Exception as ex:
         print(f"ERROR: save_textfile: {ex}")
 
-def load_csv(filepath: str | Path, index_col:int = None):
+def load_csv(filepath: str | Path, index_col:int = None) -> pd.DataFrame | None:
     print(f"loading {filepath}...")
     try:
         return pd.read_csv(filepath, index_col=index_col).apply(lambda col: pd.to_datetime(col, errors="ignore") if col.dtypes == "object" else col)  # Automatically find and convert all date-like string columns
     except Exception as ex:
         print(f"ERROR: load_csv: {ex}")
+        return None
         
-def save_json(data: dict, filepath: str | Path):
+def save_json(data: dict, filepath: str | Path) -> None:
     print(f"saving {filepath}...")
     try:
         with open(filepath, 'w') as file:

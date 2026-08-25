@@ -27,11 +27,8 @@ DATE: 2026-08-24
 
 import os
 import json
-import csv
-from typing import List, Optional, Any
+from typing import List, Optional
 from pathlib import Path
-import pandas as pd
-import numpy as np
 from tqdm import tqdm
 from pydantic import BaseModel, Field, validator, ValidationError
 from datetime import datetime
@@ -41,16 +38,14 @@ import utils
 
 try:
     import ollama
-    from ollama import chat as ollama_chat
     from ollama import Client
 except Exception as ex:
     # print(f"{ex}")
     os.environ.pop("SSL_CERT_FILE", None) # to avoid error during from ollama import Client, due to non-existent /ssl/cacert.pem'
     import ollama
-    # from ollama import chat as ollama_chat
     from ollama import Client
     
-# initialize the client targeting your cloud server
+# Initialize the client targeting your cloud server, comment this if no cloud key
 OLLAMA_URL = "https://ollama.com" 
 client = Client(host=OLLAMA_URL,  headers={"Authorization": "Bearer " + cfg.OLLAMA_API_KEY})
 
@@ -125,7 +120,7 @@ class AIDesignAssistant():
     workflow, then provides a method for generating the design with Ollama.
     
     """
-    def __init__(self, query: str, query_type: str = "prompt_design", knowledge_filepath_list: List[str] | None = None, **kwargs):
+    def __init__(self, query: str, query_type: str = "prompt_design", knowledge_filepath_list: List[str] | None = None, **kwargs) -> None:
         """
         Initialize an assistant that designs an LLM prompt or output validator.
 
@@ -232,10 +227,9 @@ class AIDesignAssistant():
                                 
                                 """.format(QUERY=query, KNOWLEDGE='\n\n'.join([f'{f}:{utils.load_textfile(Path.cwd() / f)}' for f in knowledge_filepath_list]) if len(knowledge_filepath_list) else '')
 
-
         # print(prompt)
     
-    def inference(self):
+    def inference(self) -> str | dict | None:
         """Generate a response using the configured Ollama model.
 
         Returns:
@@ -265,7 +259,7 @@ class TicketTriagAgent():
     recommended actions, and review requirements.
     
     """
-    def __init__(self, domain_knowledge_filepath: str | Path | None, equipment_registry_filepath: str | Path | None, metafilter_key: str | None = "equipment_id", **kwargs):
+    def __init__(self, domain_knowledge_filepath: str | Path | None, equipment_registry_filepath: str | Path | None, metafilter_key: str | None = "equipment_id", **kwargs) -> None:
         """Initialize the agent and load domain knowledge and equipment data.
 
         Args:
@@ -301,7 +295,7 @@ class TicketTriagAgent():
         else:
             self.equipment_registry_data = utils.load_textfile(cfg.resource_dirpath / self.equipment_registry_filepath) # txt combined all rows
     
-    def metadata_filtering(self, inspection_finding_row: dict):
+    def metadata_filtering(self, inspection_finding_row: dict) -> str:
         """Return the equipment-registry record associated with an inspection finding.
 
             When ``metafilter_key`` is configured, the registry is filtered by the
@@ -320,7 +314,7 @@ class TicketTriagAgent():
         else:
             return self.equipment_registry_data
         
-    def prepare_payload(self, inspection_finding_row:str=''):
+    def prepare_payload(self, inspection_finding_row: str ='') -> str:
         """Build an LLM payload for triaging an inspection finding.
 
         Combines the finding with the relevant equipment-registry record and
@@ -342,8 +336,8 @@ class TicketTriagAgent():
         payload = ""
         
         if not len(inspection_finding_row):
-            print("No inspection finding data.")
-            return None
+            print(f"No inspection finding data: {inspection_finding_row}.")
+            raise ValueError(f"No inspection finding data: {inspection_finding_row}.")
         
         try:
             TICKET_SCHEMA = """ 
@@ -449,7 +443,7 @@ class TicketTriagAgent():
             
         return payload
            
-    def get_ticket_inference(self, inspection_finding_row: dict):
+    def get_ticket_inference(self, inspection_finding_row: dict) -> str | None:
         """Generate a maintenance-ticket inference for an inspection finding.
 
         Builds an LLM payload from the supplied finding, parses the model's
@@ -477,7 +471,7 @@ class TicketTriagAgent():
             llm_response = None
         return llm_response
     
-    def ticket_triage_from_csv(self, inspection_finding_csv_filepath: str):
+    def ticket_triage_from_csv(self, inspection_finding_csv_filepath: str) -> dict:
         """Triage inspection findings and generate maintenance tickets.
 
         Iterates over each inspection finding record and generates a ticket.

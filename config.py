@@ -16,7 +16,7 @@ result_dirpath = Path.cwd() / "results"
 if not result_dirpath.exists():
     result_dirpath.mkdir(parents=True, exist_ok=True)
     
-# llm models config
+# defualt llm models config
 llm_modelname = "llama3.2:latest"
 llm_accesspoint = "local" # "local" or "cloud"
 OLLAMA_API_KEY = os.environ.get("OLLAMA_API_KEY", None) # for cloud 
