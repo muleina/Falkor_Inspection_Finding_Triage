@@ -56,7 +56,7 @@ def ai_design_assist(**kwargs) -> None:
     query_type = kwargs.get("query_type", "prompt_design")
     llm_modelname = kwargs.get("llm_modelname", cfg.llm_modelname)
     llm_accesspoint = kwargs.get("llm_accesspoint", cfg.llm_accesspoint)
-    issave = kwargs.get("isave", True)
+    issave = kwargs.get("issave", False)
     
     llm_modelname_tag = llm_modelname.replace(".", "").replace(":", "_").replace("-", "_")
     if query_type == "prompt_design":
@@ -105,7 +105,7 @@ def inspection_ticket_triage(**kwargs)-> None:
             ``llm_modelname``, ``llm_accesspoint``,
             ``domain_knowledge_filepath``, ``equipment_registry_filepath``,
             ``metafilter_key``, ``inspection_finding_csv_filepath``, and
-            ``isave``.
+            ``issave``.
     """
     llm_modelname = kwargs.get("llm_modelname", cfg.llm_modelname)
     llm_accesspoint = kwargs.get("llm_accesspoint", cfg.llm_accesspoint)
@@ -113,7 +113,7 @@ def inspection_ticket_triage(**kwargs)-> None:
     equipment_registry_filepath = kwargs.get("equipment_registry_filepath", KnowledgeRepo.equipment_registry_csv)
     inspection_finding_csv_filepath = kwargs.get("inspection_finding_csv_filepath", KnowledgeRepo.inspection_findings_csv)
     metafilter_key = kwargs.get("metafilter_key", "equipment_id")
-    issave = kwargs.get("isave", True)
+    issave = kwargs.get("issave", False)
     
     agentInspect = TicketTriagAgent(domain_knowledge_filepath=domain_knowledge_filepath, 
                               equipment_registry_filepath=equipment_registry_filepath,
@@ -154,7 +154,8 @@ if __name__ == '__main__':
     parser.add_argument('-s', '--issave', default=False, action="store_true")
     
     print("#"*70)
-    args =  vars(parser.parse_args())
+    args = vars(parser.parse_args())
+    print(args)
     if args["mode"] == "design":
         ai_design_assist(**args)    
     elif args["mode"] == "triage":
