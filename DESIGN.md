@@ -8,9 +8,9 @@
 
 # AI assistance
 
-- I have used AI assistance (developed local code for it) to generate prompt drafts, data schema Pydantic validators for the ticketing LLM agent, and generating the documentation comments for the functions.
+- I have used AI assistance (developed local code for it) to generate prompt drafts, data schema Pydantic validators for the ticketing LLM agent, and to generate the documentation comments for the functions.
 - The drafts were compared and curated before finally being employed in the ticket triaging agent. 
-- Owing to limited time, I have not explored the prompt in detail, but rather supplied together with the knowledge sources during ticketing inference to improve performance.
+- Owing to limited time, I have not explored the prompt in detail, but rather supplied it together with the knowledge sources during ticketing inference to improve performance.
 
       python triage_agents.py -md "design" -la "$LLM_ACCESSPOINT" -lm "$LLM_MODELNAME" -qt "prompt_design" -s
       
@@ -47,6 +47,4 @@ I have decided not to use knowledge context retrieval through semantic RAG and a
 - Metadata filtering has been employed with per-ticket inference for enhanced accuracy. The drawback is the repeated calls to the agent for every ticket, instead of handling the CSV file directly and inferring once.
 - ReAct (with tool and actions in a loop) could be a better alternative for modular orchestration using tool calling to handle the full pipeline. I have not included it in the submission, due to the limited time and restrictions on dev tools for the task.
 
-Furthermore, integrating ticket accuracy evaluator Agent (e.g. faithfulness, context relevancy, etc.) using RAGAS could have been a great feature.
-A Docker container and test scripts (e.g., pytest) would have been a great addition to the repo. 
-But a simple requirements.txt along with installation and execution scripts has been provided. A Python package checker has been added to the GitHub workflow.
+Furthermore, integrating a ticket accuracy evaluator Agent (e.g. faithfulness, context relevancy, etc.) using RAGAS could have been a great feature.
