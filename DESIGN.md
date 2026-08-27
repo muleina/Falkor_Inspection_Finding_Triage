@@ -20,8 +20,14 @@
 
 I have added schema validation to the LLM in three stages: TICKET_SCHEMA format in the LLM prompt, output formatting using pydantic during the Ollama call, and after retrieving the response.
 Currently, failed tickets are skipped with error notification on the terminal, but could have been handled better with LOGGER setup.
-Smaller models, such as Llama3.2:latest, struggles to follow the output structure.
+Smaller models, such as Llama3.2:latest, struggle to follow the output structure.
 
+The following validators are incorporated:
+- InspectionFinding: to validate inspection_findings.csv
+- EquipmentRegistry: to validate equipment_registry.csv
+- Ticket: to validate a single ticket.json
+- TicketsJSON: to validate tickets.json
+   
 # B. Domain knowledge
 
 Currently, the knowledge (small context) and inspection comments are supplied directly to the LLM prompt. 
