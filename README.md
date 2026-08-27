@@ -13,7 +13,7 @@ Make sure you have stored the  Ollama cloud API key in the local environment var
  
      export OLLAMA_API_KEY="__your_api_key__" 
 ### CLI 
-    pip install -r requirement.txt
+    pip install -r requirements.txt
     bash setup_ollama_api_key.sh
 ### Docker
 Build Docker Image
@@ -27,7 +27,7 @@ Create and Run Docker containers
 - PROMPT DESIGN FOR TRIAGE AGENT USING AI DESIGN ASSISTANT
 
         docker run --rm -e OLLAMA_API_KEY=$OLLAMA_API_KEY falkor_triage_agents -md "design" -la "cloud" -lm "gemma4" -qt "prompt_design"
-To save to a local file e.g., "D:/Falkor/results", change the path to your local directory path
+To save to a local file, e.g., "D:/Falkor/results", change the path to your local directory path
         
         docker run --rm -v D:/Falkor/results:/app/results -e OLLAMA_API_KEY=$OLLAMA_API_KEY falkor_triage_agents -md "design" -la "cloud" -lm "gemma4" -qt "prompt_design" -s 
 - VALIDATOR SCHEMA DESIGN FOR TRIAGE AGENT USING AI DESIGN ASSISTANT
