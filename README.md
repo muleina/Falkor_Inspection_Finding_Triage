@@ -19,7 +19,7 @@ Output is a JSON file of tickets. A human still approves the result; the system 
 - [Results](https://github.com/muleina/Falkor_Inspection_Finding_Triage#results)
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-## Installation (CLI or Docker)
+## Installation
 Make sure you have stored the  Ollama cloud API key in the local environment variable OLLAMA_API_KEY:
     
     export OLLAMA_API_KEY="__your_api_key__" 
