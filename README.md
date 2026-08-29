@@ -1,3 +1,8 @@
+<div>
+    <a href="https://github.com/muleina/Falkor_Inspection_Finding_Triage/actions/workflows/python-package.yml"><img src="https://github.com/muleina/Falkor_Inspection_Finding_Triage/actions/workflows/python-package.yml/badge.svg" alt="Python CI"></a>
+    <a href="https://github.com/muleina/Falkor_Inspection_Finding_Triage/actions/workflows/docker-image.yml"><img src="https://github.com/muleina/Falkor_Inspection_Finding_Triage/actions/workflows/docker-image.yml/badge.svg" alt="Docker CI"></a>
+</div>
+
 #  Inspection Finding Triage (By Mulugeta W.A)
 
 Inspection and maintenance activity on an offshore production platform generates findings: free-text
