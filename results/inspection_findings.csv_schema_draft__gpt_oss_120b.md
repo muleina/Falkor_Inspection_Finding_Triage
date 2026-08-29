@@ -1,27 +1,123 @@
-You are a Python developer tasked with writing a **single Pydantic data model** that precisely represents each row of the file `data/inspection_findings.csv`.  
+```python
+from __future__ import annotations
 
-The CSV contains the following columns (in the given order) and associated constraints that must be reflected in the schema:
+import re
+from datetime import date
+from typing import Literal
 
-* `finding_id` – a unique identifier in the exact pattern **`F-####`** where each `#` is a digit.  
-* `reported_date` – an ISO‑8601 date (e.g., `2024-03-15`).  
-* `equipment_id` – a string that matches a key in the equipment registry; treat it as a plain non‑empty string.  
-* `equipment_type` – a free‑form string taken from the registry; keep it as a plain string.  
-* `inspection_type` – one of the seven known types: `Routine Operator Round`, `Function Test`, `Corrosion Survey`, `Statutory Inspection`, `Condition Monitoring`, `Structural Survey`, `Shutdown Inspection`.  
-* `inspection_method` – free‑form string; keep it as a plain string.  
-* `finding_description` – free‑form text; keep it as a plain string.  
-* `reported_by` – name of the person reporting the finding; keep it as a plain string.  
-* `reporter_role` – job title of the reporter; keep it as a plain string.  
+from pydantic import BaseModel, Field, validator
 
-Your model must:
 
-1. **Use appropriate Pydantic field types** (`str`, `date`, `Literal`, etc.).  
-2. **Enforce the `finding_id` pattern** with a `constr` regex validator.  
-3. **Enforce the ISO‑8601 date** by declaring the field as `date`.  
-4. **Limit `inspection_type`** to the exact list above by using `Literal` (or an `Enum`).  
-5. **Include a helpful docstring** for each field that repeats the note from the CSV description.  
-6. **Provide a class‑level docstring** that explains the model represents a single inspection finding record.  
-7. **Wrap the entire definition in a single fenced Python code block** and output **only** that code block—no surrounding explanation, no additional prose.  
+class InspectionFinding(BaseModel):
+    """
+    Pydantic schema representing a row from ``data/inspection_findings.csv``.
+    All fields are required and validated against the constraints
+    described in the project brief.
+    """
 
-Before finishing, perform a self‑check and **state explicitly** whether the generated schema satisfies every column constraint listed above. If any constraint cannot be represented directly in Pydantic, mention the limitation and the chosen workaround.  
+    finding_id: str = Field(
+        ...,
+        description="Unique identifier, format ``F-####`` where #### is a four‑digit number.",
+        examples=["F-1005"],
+    )
+    reported_date: date = Field(
+        ...,
+        description="Date the finding was reported, ISO‑8601 (YYYY‑MM‑DD).",
+        examples=["2023-07-15"],
+    )
+    equipment_id: str = Field(
+        ...,
+        description="Foreign key to the equipment registry.",
+        examples=["FG-0455"],
+    )
+    equipment_type: str = Field(
+        ...,
+        min_length=1,
+        description="Denormalised equipment type from the registry.",
+    )
+    inspection_type: Literal[
+        "Routine Operator Round",
+        "Function Test",
+        "Corrosion Survey",
+        "Statutory Inspection",
+        "Condition Monitoring",
+        "Structural Survey",
+        "Shutdown Inspection",
+    ] = Field(
+        ...,
+        description="Category of the inspection that generated the finding.",
+    )
+    inspection_method: str = Field(
+        ...,
+        min_length=1,
+        description="Method used to detect the finding (e.g., visual, ultrasonic).",
+    )
+    finding_description: str = Field(
+        ...,
+        min_length=1,
+        description="Free‑text description written by the reporter.",
+    )
+    reported_by: str = Field(
+        ...,
+        min_length=1,
+        description="Name of the person who reported the finding.",
+    )
+    reporter_role: str = Field(
+        ...,
+        min_length=1,
+        description="Job title of the reporter.",
+    )
 
-The response must be concise, production‑ready, and ready to be imported into a Python project without further modification.
+    # --------------------------------------------------------------------- #
+    # Validators – enforce deterministic, machine‑checkable rules
+    # --------------------------------------------------------------------- #
+
+    @validator("finding_id")
+    def check_finding_id(cls, v: str) -> str:
+        """
+        Must match the pattern ``F-####`` where ``####`` is exactly four digits.
+        """
+        if not re.fullmatch(r"F-\d{4}", v):
+            raise ValueError("finding_id must be in the form 'F-####' (four digits).")
+        return v
+
+    @validator("equipment_id")
+    def check_equipment_id(cls, v: str) -> str:
+        """
+        The brief does not prescribe a strict pattern; we only require a non‑empty
+        alphanumeric string (allowing hyphens/underscores).
+        """
+        if not re.fullmatch(r"[A-Za-z0-9_-]+", v):
+            raise ValueError("equipment_id must be alphanumeric (hyphens/underscores allowed).")
+        return v
+
+    @validator("inspection_method")
+    def method_not_blank(cls, v: str) -> str:
+        if not v.strip():
+            raise ValueError("inspection_method cannot be blank.")
+        return v
+
+    @validator("finding_description")
+    def description_not_blank(cls, v: str) -> str:
+        if not v.strip():
+            raise ValueError("finding_description cannot be blank.")
+        return v
+
+    @validator("reported_by")
+    def reporter_name_not_blank(cls, v: str) -> str:
+        if not v.strip():
+            raise ValueError("reported_by cannot be blank.")
+        return v
+
+    @validator("reporter_role")
+    def reporter_role_not_blank(cls, v: str) -> str:
+        if not v.strip():
+            raise ValueError("reporter_role cannot be blank.")
+        return v
+
+    @validator("equipment_type")
+    def equipment_type_not_blank(cls, v: str) -> str:
+        if not v.strip():
+            raise ValueError("equipment_type cannot be blank.")
+        return v
+```

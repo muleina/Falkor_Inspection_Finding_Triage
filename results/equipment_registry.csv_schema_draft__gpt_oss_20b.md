@@ -1,25 +1,98 @@
-Please design a Pydantic data model for the `equipment_registry.csv` file.  
-The CSV contains the following columns:  
+```python
+from __future__ import annotations
 
-- `equipment_id` – a unique identifier, string.  
-- `equipment_type` – descriptive string.  
-- `service_description` – descriptive string.  
-- `criticality_score` – integer 1–10, where 10 is most critical.  
-- `reliability_score` – integer 1–10, where 10 is highly reliable (opposite direction to likelihood).  
-- `safety_critical_element` – string, must be either “Yes” or “No” (case‑insensitive).  
-- `redundancy` – free‑text description (e.g., “None”, “N+1 (TAG)”, “Voted 2oo3”, “Duplicated (TAG)”, “Yes (bypass available)”).  
-- `engineer_comment` – free‑text notes, may be empty.
+import re
+from typing import Optional
 
-The Pydantic model should:
+from pydantic import BaseModel, Field, validator
 
-1. Inherit from `pydantic.BaseModel`.  
-2. Declare each field with the correct type and include a short docstring.  
-3. Use `Field(..., ge=1, le=10)` for the score fields to enforce the 1–10 range.  
-4. Validate `safety_critical_element` to accept only “Yes” or “No” (case‑insensitive) and store it in title‑case.  
-5. Allow `redundancy` and `engineer_comment` to be optional strings (default to empty string).  
-6. Provide a `Config` class that sets `allow_population_by_field_name = True` and `json_encoders` if needed.  
-7. Include a `parse_row` class method that accepts a dictionary (e.g., from `csv.DictReader`) and returns an instance, raising a `pydantic.ValidationError` on invalid data.  
-8. Ensure the model can be serialized to JSON with `model.json()`.
 
-Output only the Python code for the model, no explanatory text.  
-If any ambiguity exists (e.g., the exact allowed values for `redundancy`), note it in a comment within the code.
+class EquipmentRegistryEntry(BaseModel):
+    """
+    Pydantic model representing a single row from equipment_registry.csv.
+    """
+
+    equipment_id: str = Field(
+        ...,
+        description="Primary key, e.g., FG-0455",
+    )
+    equipment_type: str = Field(
+        ...,
+        description="Descriptive type of the equipment",
+    )
+    service_description: str = Field(
+        ...,
+        description="Descriptive service description",
+    )
+    criticality_score: int = Field(
+        ...,
+        description="1–10, 10 = most critical",
+    )
+    reliability_score: int = Field(
+        ...,
+        description="1–10, 10 = highly reliable (opposite direction to likelihood)",
+    )
+    safety_critical_element: str = Field(
+        ...,
+        description='Yes or No',
+    )
+    redundancy: str = Field(
+        ...,
+        description="Redundancy description",
+    )
+    engineer_comment: Optional[str] = Field(
+        None,
+        description="Unstructured notes about the specific item",
+    )
+
+    @validator("equipment_id")
+    def _validate_equipment_id(cls, v: str) -> str:
+        if not v or not isinstance(v, str):
+            raise ValueError("equipment_id must be a non‑empty string")
+        # Expected pattern: two uppercase letters, a dash, and four digits
+        if not re.match(r"^[A-Z]{2}-\d{4}$", v):
+            raise ValueError("equipment_id must match pattern XX-0000")
+        return v
+
+    @validator("equipment_type", "service_description")
+    def _validate_non_empty_str(cls, v: str, field) -> str:
+        if not v or not isinstance(v, str) or not v.strip():
+            raise ValueError(f"{field.name} must be a non‑empty string")
+        return v
+
+    @validator("criticality_score", "reliability_score")
+    def _validate_score(cls, v: int, field) -> int:
+        if not isinstance(v, int) or not (1 <= v <= 10):
+            raise ValueError(f"{field.name} must be an integer between 1 and 10")
+        return v
+
+    @validator("safety_critical_element")
+    def _validate_safety_critical_element(cls, v: str) -> str:
+        if v not in {"Yes", "No"}:
+            raise ValueError('safety_critical_element must be "Yes" or "No"')
+        return v
+
+    @validator("redundancy")
+    def _validate_redundancy(cls, v: str) -> str:
+        allowed = {
+            "None",
+            "N+1 (TAG)",
+            "Voted 2oo3",
+            "Duplicated (TAG)",
+            "Yes (bypass available)",
+        }
+        if v not in allowed:
+            raise ValueError(
+                f"redundancy must be one of {sorted(allowed)}"
+            )
+        return v
+
+    @validator("engineer_comment", always=True)
+    def _validate_engineer_comment(cls, v: Optional[str]) -> Optional[str]:
+        if v is not None and not isinstance(v, str):
+            raise ValueError("engineer_comment must be a string if provided")
+        return v
+
+    class Config:
+        orm_mode = True
+```
